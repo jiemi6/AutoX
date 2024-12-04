@@ -1,7 +1,204 @@
 # Change Log
 autoxjs 整个项目的一些更新日志,双版本号为稳定版（内容以修复的bug为主），单版本号为激进版本、发布新内容。
 
-## [Unreleased](https://github.com/kkevsekk1/AutoX/compare/6.5.3...HEAD) 未发布
+## [Unreleased](https://github.com/kkevsekk1/AutoX/compare/6.6.7...HEAD) 未发布
+
+
+## [6.6.7] - 2024-8-15
+
+@Liberations
+
+*  dex 加载问题
+
+[6.6.7]:https://github.com/kkevsekk1/AutoX/compare/6.6.6...6.6.7
+
+
+
+
+## [6.6.6] - 2024-7-28
+
+@Liberations
+
+*  修复打开USB调试开关后VSCODE无法正常连接手机进行调试 
+*  修复定时选项问题
+*  APP处于后台时Toast不显示等问题
+
+[6.6.6]:https://github.com/kkevsekk1/AutoX/compare/6.6.5...6.6.6
+
+
+## [6.6.5] - 2024-7-14
+
+@Liberations
+
+*  Android 11以上外部存储权限适配
+*  新建文件bug
+*  读取包、应用列表问题
+*  截图失败问题
+
+@happyme531
+
+* 设置帧率问题 
+
+
+
+[6.6.5]:https://github.com/kkevsekk1/AutoX/compare/6.6.4...6.6.5
+
+
+
+
+## [6.6.4] - 2024-7-7
+
+@gaomanyi
+
+*  修复android14 中工程项目显示异常问题。
+*  修复布局分析问题
+*  wifi 链接vscode报错
+
+@Lin 
+
+* 修复编辑器无法进入
+* 修复定时任务初始化错误
+
+
+[6.6.4]:https://github.com/kkevsekk1/AutoX/compare/6.6.3...6.6.4
+
+
+
+## [6.6.3] - 2024-6-23
+
+@SOCK-MAGIC
+
+*  增加模块 model
+*  迁移到网络模块
+*  修复点击事件
+*  修复bug无数
+*  修复版本号问题
+*  kotlin2.0 问题修复
+  
+@Lin 
+
+*  增加安卓14的适配
+*  恢复误删的权限一大批
+*  修复报错的bug无数
+
+
+@Shaun-Fong
+
+*  修复广播接收问题
+*  修复bug一批
+*  安卓14兼容问题
+
+
+[6.6.3]:https://github.com/kkevsekk1/AutoX/compare/6.6.2...6.6.3
+
+
+## [6.6.2] - 2024-6-4
+
+@refactor
+
+*  更新配置
+*  修复类型不匹配
+*  简化初始化视图
+*  删除未使用代码
+*  修复很多bug
+
+[6.6.2]:https://github.com/kkevsekk1/AutoX/compare/6.6.1...6.6.2
+
+
+## [6.6.1] - 2024-5-12
+
+@cnbilinyj 
+* 解决文件名是数字问题
+  
+@Lin 
+* 拦截删除代码时可能发生的崩溃
+  
+@refactor
+* 迁移rxjava 适配器
+* 添加版本兼容
+* 统一使用 libs
+* 修复一些bug
+
+* OpenIntentActivity 这新增的，要同步对稳定进行修改
+
+[6.6.1]:https://github.com/kkevsekk1/AutoX/compare/6.6.0...6.6.1
+
+
+## [6.6.0] - 2024-4-21
+@plus1998
+* 兼容小米权限设置
+
+@aiselp
+* 删除大量未使用权限
+
+先试用，目前比较稳定版本应该是6.5.8
+
+[6.6.0]:https://github.com/kkevsekk1/AutoX/compare/6.5.9...6.6.0
+
+
+
+## [6.5.9] - 2024-4-8
+@plus1998
+* 实现mqtt demo
+@aiselp
+* 依赖更新，kotlin升级到1.8.0
+* 删除部分未使用Activity，bug修复
+@Lin
+修复dialogs.build报错
+
+[6.5.9]:https://github.com/kkevsekk1/AutoX/compare/6.5.8...6.5.9
+
+## [6.5.8] - 2024-2-6
+@aiselp
+* 调试器优化，升级target SDK到28(android9.0)
+* bug修复,截图优化
+* 设置页面更新
+  @zwc456baby
+* 修复打出的包崩溃问题，release下不启用内存泄漏检测
+
+[6.5.8]:https://github.com/kkevsekk1/AutoX/compare/6.5.7...6.5.8
+
+## [6.5.7] - 2024-1-14
+@aiselp
+* 修复运行ui脚本存在的内存泄露
+* 截图逻辑优化，使截图权限在所有脚本共享
+* 添加离线文档选项
+@Lin
+* 浏览器打开改为直接下载安装
+* 修复"emit"报错 
+* 每次打开都是新任务，不受上一次打开文件内容的影响
+
+[6.5.7]:https://github.com/kkevsekk1/AutoX/compare/6.5.6...6.5.7
+
+## [6.5.6] - 2023-12-16
+@aiselp
+* 优化编辑器
+@Lin
+* 增加编辑器选择
+* 编辑器优化
+* 主页搜索优化
+
+
+[6.5.6]:https://github.com/kkevsekk1/AutoX/compare/6.5.5...6.5.6
+
+## [6.5.5] - 2023-11-10
+@aiselp
+* 移除了ci构建中模板签名，打包时会重新签名
+* 锁定androidx.core版本为1.8.0，高的版本会引起 6.5.4版本运行脚本会出错 修复bug #723
+* 修复打包时只勾选opencv缺少依赖的问题
+* 编辑器优化
+* 添加rxjs库
+* 最后，由于最近几个版本有加大升级，有bug很正常，大家积极提bug、有能力的可以适当修复
+* 每个人都共享力量，软件bug才能修复，少抱怨！
+
+[6.5.5]:https://github.com/kkevsekk1/AutoX/compare/6.5.4...6.5.5
+
+
+## [6.5.4] - 2023-11-10
+@aiselp
+* 换新编辑器
+
+[6.5.4]:https://github.com/kkevsekk1/AutoX/compare/6.5.3...6.5.4
 
 ## [6.5.3] - 2023-10-24
 @aiselp

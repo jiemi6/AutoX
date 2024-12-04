@@ -34,6 +34,10 @@
 * 官方论坛： [www.autoxjs.com](http://www.autoxjs.com)
 * autoxjs[更新日志](CHANGELOG.md)
 
+### 欢迎点赞
+
+[![Star History Chart](https://api.star-history.com/svg?repos=kkevsekk1/AutoX&type=Date)](https://star-history.com/#kkevsekk1/AutoX&Date)
+
 ### Autox.js下载地址：
 [https://github.com/kkevsekk1/AutoX/releases](https://github.com/kkevsekk1/AutoX/releases)  
 如果下载过慢可以右键复制 Release Assets 中APK文件的链接地址，粘贴到 [http://toolwa.com/github/](http://toolwa.com/github/) 等github加速网站下载
@@ -128,17 +132,17 @@
 
 ##### 本地安装调试版本到设备：
 ```shell
-./gradlew inrt:assembleTemplateDebug && ./gradlew inrt:cp2APPDebug && ./gradlew app:assembleV6Debug && ./gradlew app:installV6Debug
+./gradlew app:buildDebugTemplateApp && ./gradlew app:assembleV6Debug && ./gradlew app:installV6Debug
 #或
-./gradlew inrt:assembleTemplateDebug ; ./gradlew inrt:cp2APPDebug ; ./gradlew app:assembleV6Debug ; ./gradlew app:installV6Debug
+./gradlew app:buildDebugTemplateApp ; ./gradlew app:assembleV6Debug ; ./gradlew app:installV6Debug
 ```
 生成的调试版本APK文件在 app/build/outputs/apk/v6/debug 下，使用默认签名
 
 ##### 本地编译发布版本：
 ```shell
-./gradlew inrt:assembleTemplate && ./gradlew inrt:cp2APP && ./gradlew app:assembleV6
+./gradlew app:buildTemplateApp && ./gradlew inrt:cp2APP && ./gradlew app:assembleV6
 #或
-./gradlew inrt:assembleTemplate ; ./gradlew inrt:cp2APP ; ./gradlew app:assembleV6
+./gradlew app:buildTemplateApp ; ./gradlew inrt:cp2APP ; ./gradlew app:assembleV6
 ```
 生成的是未签名的APK文件，在 app/build/outputs/apk/v6/release 下，需要签名后才能安装
 
@@ -146,9 +150,7 @@
 先运行以下命令：
 
 ```shell
-./gradlew inrt:assembleTemplate && ./gradlew inrt:cp2APP
-#或
-./gradlew inrt:assembleTemplate ; ./gradlew inrt:cp2APP
+./gradlew app:buildDebugTemplateApp
 ```
 
 再点击 Android Studio 运行按钮
@@ -157,9 +159,7 @@
 先运行以下命令：
 
 ```shell
-./gradlew inrt:assembleTemplate && ./gradlew inrt:cp2APP
-#或
-./gradlew inrt:assembleTemplate ; ./gradlew inrt:cp2APP
+./gradlew app:buildTemplateApp
 ```
 
 再点击 Android Studio 菜单 "Build" -> "Generate Signed Bundle /APK..." -> 勾选"APK" -> "Next" -> 选择或新建证书 -> "Next" -> 选择"v6Release" -> "Finish"

@@ -1,20 +1,17 @@
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okio.use
+
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.autojs.android.library)
     id("com.yanzhenjie.andserver")
     id("kotlin-kapt")
 }
 
 android {
     namespace = "com.aiselp.autojs.codeeditor"
-    compileSdk = 33
-
-    defaultConfig {
-        minSdk = 21
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -26,49 +23,50 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }
 
 dependencies {
+    implementation(projects.autojs)
 
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.andserver.api)
+    implementation(libs.androidx.constraintlayout)
     kapt(libs.andserver.processor)
     implementation(libs.kotlinx.coroutines.android)
-    api(libs.nanohttpd.webserver)
     api(libs.androidx.webkit)
     implementation(libs.google.gson)
     implementation(libs.core.ktx)
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
 
 tasks.register("downloadEditor") {
-    val tag = "dev-0.3.0"
-    val version = 3
+    val tag = "v0.4.0"
+    val version = 4
     val uri = "https://github.com/aiselp/vscode-mobile/releases/download/${tag}/dist.zip"
     val assetsDir = File(projectDir, "/src/main/assets/codeeditor")
     val versionFile = File(assetsDir, "version.txt")
     doFirst {
-        logger.log(org.gradle.api.logging.LogLevel.LIFECYCLE,"start downloadEditor")
+        logger.log(LogLevel.LIFECYCLE, "start downloadEditor")
         assetsDir.mkdirs()
-        if (versionFile.isFile){
+        if (versionFile.isFile) {
             val dowversion = versionFile.readText().toInt()
             if (dowversion == version) {
-                logger.log(org.gradle.api.logging.LogLevel.LIFECYCLE,"skip download")
+                logger.log(LogLevel.LIFECYCLE, "skip download")
                 return@doFirst
             }
         }
-        URL(uri).openStream().use {
-            File(assetsDir, "dist.zip").outputStream().use { out->
+        val response = OkHttpClient.Builder().build().newCall(
+            Request.Builder().url(uri).build()
+        ).execute()
+        check(response.isSuccessful) { "download error response code:${response.code}" }
+        response.body!!.byteStream().use {
+            File(assetsDir, "dist.zip").outputStream().use { out ->
                 it.copyTo(out)
             }
         }

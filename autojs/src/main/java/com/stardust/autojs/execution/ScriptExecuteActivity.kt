@@ -1,6 +1,5 @@
 package com.stardust.autojs.execution
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -54,7 +53,7 @@ class ScriptExecuteActivity : AppCompatActivity() {
         }
         mScriptExecution = execution
         mScriptSource = mScriptExecution.source
-        mScriptEngine = mScriptExecution.createEngine(this)
+        mScriptEngine = mScriptExecution.createEngine()
         mExecutionListener = mScriptExecution.listener
         mRuntime = (mScriptEngine as JavaScriptEngine).runtime
         eventEmitter = EventEmitter(mRuntime.bridges)
@@ -91,13 +90,14 @@ class ScriptExecuteActivity : AppCompatActivity() {
                 override fun onException(e: Exception) {
                     this@ScriptExecuteActivity.onException(e)
                 }
-            })
+            }
+        )
     }
 
     private fun prepare() {
         mScriptEngine.put("activity", this)
         mScriptEngine.setTag("activity", this)
-        mScriptEngine.setTag(ScriptEngine.TAG_ENV_PATH, mScriptExecution!!.config.path)
+        mScriptEngine.setTag(ScriptEngine.TAG_ENV_PATH, mScriptExecution.config.path)
         mScriptEngine.setTag(
             ScriptEngine.TAG_WORKING_DIRECTORY,
             mScriptExecution.config.workingDirectory
@@ -122,9 +122,11 @@ class ScriptExecuteActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(LOG_TAG, "onDestroy")
-        mScriptEngine.put("activity", null)
-        mScriptEngine.setTag("activity", null)
-        mScriptEngine.destroy()
+        if (::mScriptEngine.isInitialized) {
+            mScriptEngine.put("activity", null)
+            mScriptEngine.setTag("activity", null)
+            mScriptEngine.destroy()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -135,6 +137,7 @@ class ScriptExecuteActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        onBackPressedDispatcher.onBackPressed()
         val event = SimpleEvent()
         emit("back_pressed", event)
         if (!event.consumed) {
@@ -173,6 +176,7 @@ class ScriptExecuteActivity : AppCompatActivity() {
         return super.onGenericMotionEvent(event)
     }
 
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         emit("activity_result", requestCode, resultCode, data)
@@ -202,7 +206,7 @@ class ScriptExecuteActivity : AppCompatActivity() {
         task: ScriptExecutionTask?
     ) : AbstractScriptExecution(task) {
         private var mScriptEngine: ScriptEngine<*>? = null
-        fun createEngine(activity: Activity?): ScriptEngine<*> {
+        fun createEngine(): ScriptEngine<*> {
             if (mScriptEngine != null) {
                 mScriptEngine!!.forceStop()
             }
@@ -219,6 +223,7 @@ class ScriptExecuteActivity : AppCompatActivity() {
     companion object {
         private const val LOG_TAG = "ScriptExecuteActivity"
         private val EXTRA_EXECUTION_ID = ScriptExecuteActivity::class.java.name + ".execution_id"
+
         @JvmStatic
         fun execute(
             context: Context,

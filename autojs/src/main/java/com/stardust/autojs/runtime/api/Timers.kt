@@ -10,7 +10,7 @@ import com.stardust.autojs.runtime.ScriptRuntime
  */
 class Timers(private val mRuntime: ScriptRuntime) {
     private val mThreads: Threads = mRuntime.threads
-    private val mUiTimer: Timer = Timer(mRuntime, Looper.getMainLooper())
+    val uiTimer: Timer = Timer(mRuntime, Looper.getMainLooper())
     val mainTimer
         get() = mRuntime.loopers.mTimer
 
@@ -20,17 +20,18 @@ class Timers(private val mRuntime: ScriptRuntime) {
     fun getTimerForThread(thread: Thread): Timer {
         if (thread === mThreads.mainThread) {
             return mRuntime.loopers.mTimer
+        } else if (thread is TimerThread) {
+            return thread.timer
+        } else if (thread === Looper.getMainLooper().thread) {
+            uiTimer
         }
-        val timer = TimerThread.getTimerForThread(thread)
-        return if (timer == null && Looper.myLooper() == Looper.getMainLooper()) {
-            mUiTimer
-        } else timer ?: mainTimer
+        return mainTimer
     }
 
     fun setTimeout(vararg args: Any?): Int {
         val listener = args.elementAtOrNull(0)
         check(listener != null) { "callback cannot be null" }
-        val delay = args.elementAtOrNull(1)?.let { (it as Double).toLong() } ?: 1
+        val delay = (args.elementAtOrNull(1) as? Double)?.toLong() ?: 1
         return timerForCurrentThread.setTimeout(listener, delay, *args.drop(2).toTypedArray())
     }
 
@@ -45,8 +46,8 @@ class Timers(private val mRuntime: ScriptRuntime) {
     fun setInterval(vararg args: Any?): Int {
         val listener = args.elementAtOrNull(0)
         check(listener != null) { "callback cannot be null" }
-        val interval = args.elementAtOrNull(1)?.let { (it as Double).toLong() } ?: 1
-        return timerForCurrentThread.setInterval(listener, interval, *args.drop(2).toTypedArray())
+        val delay = (args.elementAtOrNull(1) as? Double)?.toLong() ?: 1
+        return timerForCurrentThread.setInterval(listener, delay, *args.drop(2).toTypedArray())
     }
 
     fun clearTimeout(id: Int): Boolean {

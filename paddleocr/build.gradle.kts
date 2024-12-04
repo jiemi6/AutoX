@@ -1,23 +1,17 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.autojs.android.library)
 }
 
 android {
-    compileSdk = versions.compile
-
-    defaultConfig {
-        minSdk = versions.mini
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
     buildTypes {
         named("release") {
             isMinifyEnabled = false
-            setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android.txt"),
+                    "proguard-rules.pro"
+                )
+            )
         }
     }
 
@@ -32,12 +26,8 @@ android {
 dependencies {
     implementation(libs.okhttp)
     implementation(libs.core.ktx)
-}
-dependencies {
-    testImplementation( "junit:junit:4.13.2")
-    androidTestImplementation( "androidx.test.ext:junit:1.1.3")
-    androidTestImplementation( "androidx.test.espresso:espresso-core:3.4.0")
-}
-repositories {
-    mavenCentral()
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }
